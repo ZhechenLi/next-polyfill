@@ -1,0 +1,50 @@
+{
+  "name": "js-feature-parser",
+  "version": "0.0.1",
+  "description": "a parser for explorer what feature your js project has used",
+  "main": "./lib/index.js",
+  "files": [
+    "bin",
+    "lib",
+    "package.json",
+    "data"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsc -w",
+    "debug": "nodemon --inspect-brk lib/index.js"
+  },
+  "author": "tsesamli",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/helpers": "^7.1.2",
+    "@babel/traverse": "^7.1.4",
+    "chokidar": "^2.0.4",
+    "commander": "^2.19.0",
+    "fs-extra": "^7.0.1",
+    "immer": "^1.7.4",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "@types/lodash": "^4.14.118",
+    "@types/package-json": "^4.0.1",
+    "@types/node": "^10.12.11",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.6",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@tarojs/plugin-babel": "^1.2.0-beta.1",
+    "typescript": "^3.2.2"
+  },
+  "browserslist": "IE < 9",
+  "nodemonConfig": {
+    "ignore": ["lib/*"]
+  }
+}
