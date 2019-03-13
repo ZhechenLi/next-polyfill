@@ -24,11 +24,12 @@ export function parse(
     {
       plugins: [
         [
+          // TODO: 提取成单独的 plugin
           {
             ...useBuiltInsPlugin(babel),
             post(this: { builtIns: Set<string> }) {
               if (!this.builtIns) {
-                throw new Error('BuiltIns hasn\'t successful create');
+                throw new Error("BuiltIns hasn't successful create");
               }
               result = this.builtIns;
             }
@@ -43,4 +44,3 @@ export function parse(
     }
   );
 }
-

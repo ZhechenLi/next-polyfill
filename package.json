@@ -22,11 +22,14 @@
     "@babel/helpers": "^7.1.2",
     "@babel/traverse": "^7.1.4",
     "@types/jest": "^24.0.11",
+    "cheerio": "^1.0.0-rc.2",
     "chokidar": "^2.0.4",
     "commander": "^2.19.0",
     "fs-extra": "^7.0.1",
+    "html-webpack-plugin": "^3.2.0",
     "immer": "^1.7.4",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "underscore.string": "^3.3.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

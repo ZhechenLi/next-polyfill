@@ -4,20 +4,9 @@
  */
 let fs = require('fs-extra');
 let path = require('path');
+import s from 'underscore.string';
 
 let debug = true; // TODO
-
-function CaseKebab2Camel(text = '') {
-  let meats = text.split('-');
-  if (meats.length < 2) {
-    return text;
-  }
-  return meats.map((e, i) => (i === 0 ? e : UpperCaseFirst(e))).join('');
-}
-
-function UpperCaseFirst(text) {
-  return text.replace(/^\w/, match => match.toUpperCase());
-}
 
 let featureMap = new Map();
 
@@ -27,6 +16,7 @@ let babelFeatureList = new Set(
     .toString()
     .split('\n')
 );
+
 let polyfillFeatureList = new Set(
   fs
     .readFileSync(path.join(__dirname, '../data/polyfill-feature.js'))
@@ -34,42 +24,57 @@ let polyfillFeatureList = new Set(
     .split('\n')
 );
 
-babelFeatureList.forEach(babelFeature => {
+// es6.array.copy-within => [Array.copyWithin, Array.prototype.copyWithin]
+// es6.map => [Map]
+function getAllPossiableFeature(babelFeature) {
   let keys = (babelFeature as string).split('.');
+  let type = s.camelize(keys[1]);
+  let feature = keys[2];
 
-  let type = CaseKebab2Camel(keys[1]);
-
-  let feature = CaseKebab2Camel(keys[2]) || '';
+  let possiableFeatureList = [];
 
   if (feature === 'iterator') {
-    feature = `@@${feature}`;
+    feature = '@@iterator';
   }
 
-  let polyfillFeature = feature
-    ? `${UpperCaseFirst(type)}.prototype.${feature}`
-    : `${UpperCaseFirst(type)}`;
+  if (feature === 'to-iso-string') {
+    feature = 'toISOString';
+  }
 
-  let isPolyfillSupportFeature = polyfillFeatureList.has(polyfillFeature);
-
-  // babel feature 没有区分 static 方法
-  let isPolyfillSupportStaticFeature = polyfillFeatureList.has(
-    `${UpperCaseFirst(type)}.${feature}`
+  // constructor
+  possiableFeatureList.push(`${s.capitalize(type)}`);
+  // static
+  possiableFeatureList.push(`${s.capitalize(type)}.${s.camelize(feature)}`);
+  // prototype
+  possiableFeatureList.push(
+    `${s.capitalize(type)}.prototype.${s.camelize(feature)}`
   );
 
-  if (isPolyfillSupportStaticFeature)
-    polyfillFeature = `${UpperCaseFirst(type)}.${feature}`;
+  return possiableFeatureList;
+}
 
-  if (!isPolyfillSupportFeature && !isPolyfillSupportStaticFeature) {
-    if (debug) {
-      featureMap.set(babelFeature, '');
-    }
-    return;
-  }
+function transformFeature(babelFeature, map) {
+  return getAllPossiableFeature(babelFeature)
+    .map(e => map.has(e) && e)
+    .filter(e => e)
+    .pop();
+}
 
-  featureMap.set(babelFeature, polyfillFeature);
+babelFeatureList.forEach(babelFeature => {
+  featureMap.set(
+    babelFeature,
+    transformFeature(babelFeature, polyfillFeatureList)
+  );
 });
 
 if (debug) {
+  // check babel unsupport feature
+  // babelFeatureList.forEach(e => {
+  //   if (!featureMap.get(e)) {
+  //     console.log(`unsupport babel feature: ${e}`);
+  //   }
+  // });
+
   fs.outputFileSync(
     './.temp/featureMap.js',
     JSON.stringify(
