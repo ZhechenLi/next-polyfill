@@ -70,6 +70,7 @@ module.exports = {
 优化的效果相当明显，而且这一切只需要你增加一个 webpack plugin，剩下的 Next polyfill 会帮你处理
 
 
-
+## License
+MIT
 
 
