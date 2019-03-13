@@ -8,11 +8,11 @@ import useBuiltInsPlugin from '@babel/preset-env/lib/use-built-ins-plugin';
 export { default as getFeatureMap } from './generateFeatureList';
 
 // TODO: 未来支持可选项
-type MainparamsOtions = {};
+type MainParamsOptions = {};
 
 export function parse(
   code: string,
-  options?: MainparamsOtions,
+  options?: MainParamsOptions,
   callback?: (error: Error, result: Set<string>) => void
 ) {
   let cb = callback;
@@ -26,7 +26,10 @@ export function parse(
         [
           {
             ...useBuiltInsPlugin(babel),
-            post() {
+            post(this: { builtIns: Set<string> }) {
+              if (!this.builtIns) {
+                throw new Error('BuiltIns hasn\'t successful create');
+              }
               result = this.builtIns;
             }
           },
@@ -41,7 +44,3 @@ export function parse(
   );
 }
 
-
-let a = '1'
-
-let b = 1
