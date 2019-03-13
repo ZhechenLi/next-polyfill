@@ -1,7 +1,7 @@
 {
-  "name": "js-feature-parser",
-  "version": "0.0.1",
-  "description": "a parser for explorer what feature your js project has used",
+  "name": "next-polyfill",
+  "version": "0.0.2",
+  "description": "next polyfill provide a simplify,flexible polyfill depend on what feature",
   "main": "./lib/index.js",
   "files": [
     "bin",

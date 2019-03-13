@@ -27,7 +27,15 @@ class NextPolyfillWebpackPlugin {
 
   builtins = [];
 
-  constructor(opt) {}
+  constructor(opt) {
+    const {
+      url,
+      params = {}
+    } = opt;
+
+    this.opt.url = url;
+    Object.assign(this.opt.params, params);
+  }
 
   getPolyfillUrl() {
     const { url, params } = this.opt;
@@ -108,10 +116,11 @@ class NextPolyfillWebpackPlugin {
                 $('body').prepend(
                   `<script src="${this.getPolyfillUrl()}"></script>`
                 );
-                console.log($.html());
 
                 // @ts-ignore
                 e[1].source = () => $.html();
+                // @ts-ignore
+                e[1]._value = $.html();
               });
 
             cb();
