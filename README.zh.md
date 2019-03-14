@@ -9,6 +9,11 @@ npm i --save-dev next-polyfill
 ```
 
 ## 使用
+
+Next Polyfill 做的事情很简单，读取你的代码并解析出你使用的 js 语言特性，生成对应 ployfill.io 对应的 url(你也可以替换成自己实现的版本)
+
+其中 parser 的用法如下:
+
 ```javascript
 import {parse} from 'next-polyfill';
 
@@ -29,9 +34,9 @@ parse(code, {}, (err, result)=>{
 });
 
 ```
-可以在 result 内取到当前代码所使用的 JavaScript 语法特性
+可以在回调的参数 result 内取到当前代码所使用的 JavaScript 语法特性
 
-在 Webpack 中使用
+### 在 Webpack 中使用
 
 定义 webpack.config.js
 ```js
