@@ -71,17 +71,17 @@ console.log('aloha');
 
 ![image-20190313223935661](assets/image-20190313223935661.png)
 
-可以看到在 chrome 72 下 polyfill 体积仅为 496b，几乎只包含请求头的大小
-
 接着让我们把 UA 设置成 IE9
 
 ![image-20190313224322205](assets/image-20190313224322205.png)
 
 ![image-20190313224309694](assets/image-20190313224309694.png)
 
-可以看到在只有一行代码的情况下 polyfill 的体积依然达到了2.7 k
+可以看到在只有一行代码的情况下 polyfill 的体积依然达到了2.7 k，优化的效果相当明显。
 
-优化的效果相当明显，而且这一切只需要你增加一个 webpack plugin，剩下的 Next polyfill 会帮你处理
+如果使用传统的方案，即使用户使用的是最新的浏览器，也不得不带上冗余的 2.7k 的 polyfill。
+
+而且实现这一切只需要你增加一个 webpack plugin，剩下的 Next polyfill 会帮你处理
 
 webpack example 的详细的代码[请看](https://github.com/ZhechenLi/next-polyfill/tree/feature/doc/test/webapck) 
 
