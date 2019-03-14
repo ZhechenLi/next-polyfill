@@ -39,6 +39,7 @@ parse(code, {}, (err, result)=>{
 ### 在 Webpack 中使用
 
 定义 webpack.config.js
+
 ```js
 let NextPolyfillWebpackPlugin = require('next-polyfill').NextPolyfillWebpackPlugin
 module.exports = {
@@ -49,12 +50,14 @@ module.exports = {
     ]
 }
 ```
+
 接着定义我们的 entry
+
 ```js
 console.log('aloha');
 
 [].includes(1);
-···
+```
 
 
 `NextPolyfillWebpackPlugin` 会自动在输出的 html 模板处添加 script 标签,输出如下
