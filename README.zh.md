@@ -1,14 +1,13 @@
 Next Polyfill
-
 ===================
 
 Next Polyfill 提供了一个体积更小,更灵活的 web 端 polyfill 方案
 
 ## 安装
 ```sh
-npm i next-polyfill
+npm i --save-dev next-polyfill
 ```
-
+
 ## 使用
 ```javascript
 import {parse} from 'next-polyfill';
@@ -30,13 +29,13 @@ parse(code, {}, (err, result)=>{
 });
 
 ```
-可以在 result 内取到当前代码所使用的 JavaScript 语法特性
+可以在 result 内取到当前代码所使用的 JavaScript 语法特性
 
 在 Webpack 中使用
 
 定义 webpack.config.js
 ```js
-let 
+let NextPolyfillWebpackPlugin = require('next-polyfill').NextPolyfillWebpackPlugin
 module.exports = {
     plugins: [
         // ...
@@ -45,8 +44,15 @@ module.exports = {
     ]
 }
 ```
+接着定义我们的 entry
+```js
+console.log('aloha');
 
-`NextPolyfillWebpackPlugin` 会自动在输出的 html 模板处添加 script 标签,输出如下
+[].includes(1);
+···
+
+
+`NextPolyfillWebpackPlugin` 会自动在输出的 html 模板处添加 script 标签,输出如下
 ```html
 <script src="https://polyfill.io/v3/polyfill.min.js?feature=default%2CObject.defineProperty%2CSymbol%2CSymbol%2CObject.create%2CFunction.prototype.bind%2CString.prototype.includes%2CArray.prototype.includes&amp;unknown=polyfill&amp;flags=gated"></script>
 ```
@@ -69,6 +75,7 @@ module.exports = {
 
 优化的效果相当明显，而且这一切只需要你增加一个 webpack plugin，剩下的 Next polyfill 会帮你处理
 
+详细的代码[请看](https://github.com/ZhechenLi/next-polyfill/tree/feature/doc/test/webapck) 
 
 ## License
 MIT
