@@ -6,6 +6,8 @@ import polyfills from './polyfills';
 import useBuiltInsPlugin from '@babel/preset-env/lib/use-built-ins-plugin';
 
 export { default as getFeatureMap } from './generateFeatureList';
+export { default as NextPolyfillWebpackPlugin } from './NextPolyfillWebpackPlugin';
+
 
 // TODO: 未来支持可选项
 type MainParamsOptions = {};
