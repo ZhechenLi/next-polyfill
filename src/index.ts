@@ -5,18 +5,26 @@ import polyfills from './polyfills';
 
 import useBuiltInsPlugin from '@babel/preset-env/lib/use-built-ins-plugin';
 
-export { default as getFeatureMap } from './generateFeatureList';
-export { default as NextPolyfillWebpackPlugin } from './NextPolyfillWebpackPlugin';
-
+export { default as getFeatureMap } from './util/generateFeatureMap';
+export {
+  default as NextPolyfillWebpackPlugin
+} from './NextPolyfillWebpackPlugin';
+export { default as aloha } from './aloha';
 
 // TODO: 未来支持可选项
 type MainParamsOptions = {};
 
-export function parse(
+export { default as parse } from './bomPraser';
+
+// @deprecated
+export function parseJS(
   code: string,
   options?: MainParamsOptions,
   callback?: (error: Error, result: Set<string>) => void
 ) {
+  console.warn(
+    `the current version parse only parse JS feature has been deprecated, use parse instead it`
+  );
   let cb = callback;
 
   let result: Set<string>;
@@ -30,9 +38,6 @@ export function parse(
           {
             ...useBuiltInsPlugin(babel),
             post(this: { builtIns: Set<string> }) {
-              if (!this.builtIns) {
-                throw new Error("BuiltIns hasn't successful create");
-              }
               result = this.builtIns;
             }
           },

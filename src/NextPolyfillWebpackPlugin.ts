@@ -1,7 +1,7 @@
 import { URL, URLSearchParams } from 'url';
-import { parse } from './index';
+import { parseJS, parse } from './index';
 // var HtmlWebpackPlugin = require('html-webpack-plugin');
-import getFeatureMap from './generateFeatureList';
+import getFeatureMap from './util/generateFeatureMap';
 import cheerio from 'cheerio';
 
 const featureMap = getFeatureMap();
@@ -13,6 +13,7 @@ type Opt = {
     unknown: string;
     flags: string;
   };
+  debug: boolean;
 };
 
 class NextPolyfillWebpackPlugin {
@@ -22,24 +23,22 @@ class NextPolyfillWebpackPlugin {
       feature: ['default'],
       unknown: 'polyfill',
       flags: 'gated'
-    }
+    },
+    debug: false
   };
 
   builtins = [];
 
   constructor(opt) {
-    const {
-      url,
-      params = {}
-    } = opt;
+    const { url = 'https://polyfill.io/v3/polyfill.min.js', params = {} } = opt;
 
     this.opt.url = url;
     Object.assign(this.opt.params, params);
   }
 
   getPolyfillUrl() {
-    const { url, params } = this.opt;
-
+    const { url = 'https://polyfill.io/v3/polyfill.min.js', params } = this.opt;
+    this.opt.debug && console.log(this.opt);
     const polyfillUrl = new URL(url);
 
     polyfillUrl.search = new URLSearchParams({
@@ -50,33 +49,30 @@ class NextPolyfillWebpackPlugin {
     return polyfillUrl.toString();
   }
 
+  emitHtml(data) {
+    // TODO: next version
+    // data.assetTags.scripts.push({
+    //   tagName: 'script',
+    //   voidTag: false,
+    //   attributes: {
+    //     src: 'aaaaa.js'
+    //   }
+    // });
+
+    data.body.push({
+      tagName: 'script',
+      voidTag: false,
+      attributes: {
+        src: this.getPolyfillUrl()
+      }
+    });
+  }
+
   apply(compiler) {
-    // 这是 stable 版的 html plugin, @next 版的 plugin 格式会不一样....
+    // stable version of html plugin, the format of @next version plugin would be different....
     compiler.hooks.compilation.tap('NextPolyfillWebpackPlugin', compilation => {
       const cb = (data, cb) => {
-        // TODO: next version
-        // data.assetTags.scripts.push({
-        //   tagName: 'script',
-        //   voidTag: false,
-        //   attributes: {
-        //     src: 'aaaaa.js'
-        //   }
-        // });
-
-        // console.log(`myURL.toString()`, myURL.toString(), [
-        //   ...params.feature,
-        //   ...this.builtins
-        // ]);
-
-        // TODO: 先在 emit 修改模板
-        // data.body.push({
-        //   tagName: 'script',
-        //   voidTag: false,
-        //   attributes: {
-        //     src: this.getPolyfillUrl()
-        //   }
-        // });
-
+        // emitHtml(data)
         cb(null, data);
       };
       const IS_HTML_WEBPACK_PLUGIN_SUPPORT = !!compilation.hooks
@@ -93,7 +89,7 @@ class NextPolyfillWebpackPlugin {
       // HtmlWebpackPlugin.getHooks(compilation).alterAssetTags.tap
     });
 
-    // 如果 asset 使用 eval-source-map 可能会导致 feature 检测异常, 生产环境不影响
+    // WARN:using eval-source-map would cause fail while paring feature, doesn't matter on production
     compiler.hooks.emit.tapAsync('HookChecker', (data, cb) => {
       Object.entries(data.assets)
         .filter(e => e[0].match(/.js$/))
@@ -101,16 +97,15 @@ class NextPolyfillWebpackPlugin {
           // @ts-ignore
           let code = e[1].source();
 
-          parse(code.toString(), {}, (error, result) => {
-            if (error) throw error;
-            this.builtins = [...result].map(e => featureMap.get(e));
-            console.log(this.builtins);
+          parse(code.toString()).then(feature => {
+            this.builtins = [...feature];
+            this.opt.debug && console.log('this.builtins', this.builtins);
             Object.entries(data.assets)
               .filter(e => e[0].match(/.html$/))
               .forEach(e => {
                 // @ts-ignore
                 let htmlCode = e[1].source();
-                console.log(e);
+                this.opt.debug && console.log(e);
 
                 let $ = cheerio.load(htmlCode);
                 $('body').prepend(

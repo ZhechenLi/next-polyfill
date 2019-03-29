@@ -10,7 +10,10 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'foo.bundle.[chunkhash].js'
   },
-  plugins: [new HtmlWebpackPlugin({}), new NextPolyfillWebpackPlugin({
-    //  url: 'https://abc.com' 
-  })]
+  plugins: [
+    new HtmlWebpackPlugin({}),
+    new NextPolyfillWebpackPlugin({
+      url: 'https://abc.com'
+    })
+  ]
 };
