@@ -12,14 +12,14 @@ let featureMap = new Map();
 
 let babelFeatureList = new Set(
   fs
-    .readFileSync(path.join(__dirname, '../data/babel-feature.js'))
+    .readFileSync(path.join(__dirname, '../../data/babel-feature.js'))
     .toString()
     .split('\n')
 );
 
 let polyfillFeatureList = new Set(
   fs
-    .readFileSync(path.join(__dirname, '../data/polyfill-feature.js'))
+    .readFileSync(path.join(__dirname, '../../data/listAllPolyfills.plain.js'))
     .toString()
     .split('\n')
 );

@@ -1,6 +1,6 @@
 {
   "name": "next-polyfill",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "next polyfill provide a simplify,flexible polyfill depend on what feature",
   "main": "./lib/index.js",
   "files": [
@@ -11,6 +11,7 @@
   ],
   "scripts": {
     "test": "jest",
+    "prebuild": "./tasks/listAllPolyfills.js && ./tasks/parseDefinitions.js && ./tasks/createUtil.js",
     "build": "tsc",
     "dev": "tsc -w",
     "debug": "nodemon --inspect-brk lib/index.js"
@@ -20,15 +21,18 @@
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/helpers": "^7.1.2",
+    "@babel/polyfill": "^7.4.0",
     "@babel/traverse": "^7.1.4",
     "@types/jest": "^24.0.11",
     "cheerio": "^1.0.0-rc.2",
     "chokidar": "^2.0.4",
     "commander": "^2.19.0",
     "fs-extra": "^7.0.1",
+    "glob": "^7.1.3",
     "html-webpack-plugin": "^3.2.0",
     "immer": "^1.7.4",
     "lodash": "^4.17.11",
+    "polyfill-library": "^3.31.1",
     "underscore.string": "^3.3.5"
   },
   "devDependencies": {
@@ -46,9 +50,9 @@
     "@types/node": "^10.12.11",
     "@types/package-json": "^4.0.1",
     "jest": "^24.4.0",
+    "prettier": "1.16.4",
     "typescript": "^3.2.2"
   },
-  "browserslist": "IE < 9",
   "nodemonConfig": {
     "ignore": [
       "lib/*"

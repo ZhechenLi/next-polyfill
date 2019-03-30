@@ -1,4 +1,4 @@
-import getFeatureMap from './generateFeatureList';
+import getFeatureMap from './generateFeatureMap';
 test('Simple feature: array.prototype.copyWithin', () => {
   expect(1 + 1).toEqual(2);
 });
