@@ -83,7 +83,7 @@ console.log('aloha');
 
 而且实现这一切只需要你增加一个 webpack plugin，剩下的 Next polyfill 会帮你处理
 
-webpack example 的详细的代码[请看](https://github.com/ZhechenLi/next-polyfill/tree/feature/doc/test/webapck) 
+webpack example 的详细的代码[请看](https://github.com/ZhechenLi/next-polyfill/tree/master/test/webapck) 
 
 ## License
 MIT
